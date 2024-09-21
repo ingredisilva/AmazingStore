@@ -13,7 +13,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   const { id } = params;
 
   const product = await getProductById(Number(id));
-  console.log(product)
+
   if (!product) {
     return notFound();
   }
