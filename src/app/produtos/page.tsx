@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { getProdutos } from "../../lib/getProdutos";
 import { Produto } from "@/lib/types";
-import StoreFront from "@/components/StoreFront";
-import SearchBar from "@/components/SearchBar";
-import CategoryFilter from "@/components/CategoryFilter";
+import StoreFront from "@/app/components/StoreFront";
+import SearchBar from "@/app/components/SearchBar";
+import CategoryFilter from "@/app/components/CategoryFilter";
 import styled from "styled-components";
 
 export default function SideStore() {
