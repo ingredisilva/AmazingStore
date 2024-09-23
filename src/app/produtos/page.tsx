@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import { getProdutos } from "../../lib/getProdutos";
 import { Produto } from "@/lib/types";
-import StoreFront from "@/app/components/StoreFront";
 import SearchBar from "@/app/components/SearchBar";
 import CategoryFilter from "@/app/components/CategoryFilter";
 import styled from "styled-components";
+import ProductCard from "../components/ProductCard";
 
 export default function SideStore() {
   const [products, setProducts] = useState<Produto[]>([]);
@@ -61,6 +61,15 @@ export default function SideStore() {
     flex-wrap: wrap;
   `;
 
+  const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
   return (
     <div className="container">
       <Filters>
@@ -82,8 +91,11 @@ export default function SideStore() {
       {filteredProducts.length === 0 ? (
         <p>No products found for {searchQuery}.</p>
       ) : (
-        <StoreFront products={filteredProducts} />
-      )}
+        <Grid>
+          {products.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Grid>)}
     </div>
   );
 }
