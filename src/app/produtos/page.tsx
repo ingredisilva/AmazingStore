@@ -6,6 +6,8 @@ import SearchBar from "@/app/components/SearchBar";
 import CategoryFilter from "@/app/components/CategoryFilter";
 import styled from "styled-components";
 import ProductCard from "../components/ProductCard";
+import SkeletonProductCard from "../components/SkeletonCard";
+import Loader from "../components/Loader";
 
 const Filters = styled.div`
     display: flex;
@@ -15,6 +17,7 @@ const Filters = styled.div`
 
 const Grid = styled.div`
     display: grid;
+    height: 100%;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 
@@ -27,8 +30,9 @@ export default function SideStore() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<Produto[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
+  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<string[]>([]);
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -39,6 +43,7 @@ export default function SideStore() {
         new Set(data.map((product) => product.category))
       );
       setCategories(uniqueCategories);
+      setLoading(false);
     };
 
     loadProducts();
@@ -47,22 +52,28 @@ export default function SideStore() {
   useEffect(() => {
     let filtered = products;
 
-    if (searchQuery) {
-      filtered = filtered.filter((product) =>
-        product.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    console.log('44')
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter((product) =>
-        selectedCategories.includes(product.category)
-      );
-    }
+    if (searchQuery || selectedCategories.length > 0) {
+      setSearching(true);
 
-    setFilteredProducts(filtered);
-  }, [products, searchQuery, selectedCategories]);
+      filtered = products.filter((product) => {
+        const matchesQuery = product.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        const matchesCategory =
+          selectedCategories.length === 0 ||
+          selectedCategories.includes(product.category);
+        return matchesQuery && matchesCategory;
+      });
 
-  console.log(searchQuery)
+      setTimeout(() => {
+        setFilteredProducts(filtered);
+        setSearching(false);
+      }, 500);
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [searchQuery, selectedCategories, products]);
+
   const handleCategoryChange = (category: string, isChecked: boolean) => {
     if (isChecked) {
       setSelectedCategories([...selectedCategories, category]);
@@ -72,9 +83,8 @@ export default function SideStore() {
   };
 
 
-
   return (
-    <div /* className="container" */>
+    <div /* className="container" */ style={{ height: '100%' }}>
       <Filters>
         <h1>Our Products</h1>
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -91,17 +101,26 @@ export default function SideStore() {
         </div>
       </Filters>
 
-      {filteredProducts.length === 0 ? (
-        <p>No products found for {searchQuery}.</p>
+      {loading ? (
+        <Grid>
+          {[...Array(6)].map((_, index) => (
+            <SkeletonProductCard key={index} />
+          ))}
+        </Grid>
+      ) : searching ? (
+        <Loader />
+      ) : filteredProducts.length === 0 ? (
+        <>
+          <p>No products found for {searchQuery}.</p><Grid>
+            {[...Array(6)].map((_, index) => (
+              <SkeletonProductCard key={index} />
+            ))}
+          </Grid></>
       ) : (
         <Grid>
-          {filteredProducts.map(
-            (
-              product
-            ) => (
-              <ProductCard key={product.id} product={product} />
-            )
-          )}
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </Grid>
       )}
     </div>

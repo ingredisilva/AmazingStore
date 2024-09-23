@@ -7,6 +7,8 @@ import { Produto } from "@/lib/types";
 import { truncateText } from "@/lib/truncateText";
 import { useAppDispatch } from "@/lib/store";
 import { addItem } from "@/features/cartSlice";
+import { useState } from "react";
+import Loader from "./Loader";
 
 interface ProductCardProps {
   product: Produto;
@@ -26,6 +28,7 @@ const Card = styled.div`
   text-decoration: none;
   color: inherit;
   width: 100%;
+  max-width: 400px;
   
   &:hover {
     transform: translateY(-5px);
@@ -89,6 +92,7 @@ const Button = styled.button`
 export default function ProductCard({ product }: ProductCardProps) {
   const dispatch = useAppDispatch();
   const shortDescription = truncateText(product.description, 100);
+  const [loading, setLoading] = useState(true);
 
   const handleAddToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -105,8 +109,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         <Link href={`/produtos/${product.id}`} passHref>
           <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
             <div className="image-container">
-              <Image src={product.image} alt={product.title} layout="fill" objectFit="cover" />
-            </div>
+              {loading && <Loader />}
+              <Image
+                src={product.image}
+                alt={product.title}
+                layout="fill"
+                objectFit="cover"
+                onLoadingComplete={() => setLoading(false)}
+              />            </div>
             <h2>{product.title}</h2>
             <p className="desc">{shortDescription}</p>
           </div>
@@ -122,9 +132,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <p className="price" >${product.price.toFixed(2)}</p>
           </div>
           <Button onClick={handleAddToCart}>Add to Cart</Button>
-
         </div>
-
       </>
     </Card >
   );

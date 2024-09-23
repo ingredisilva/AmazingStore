@@ -14,8 +14,8 @@ const PageContainer = styled.div`
 `;
 
 const MainContent = styled.main`
-  margin-top: 50px;
-  flex: 1;
+/*   margin-top: 50px;
+ */  flex: 1;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
