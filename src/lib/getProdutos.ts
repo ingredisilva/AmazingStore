@@ -6,7 +6,7 @@ interface QueryParams {
   [key: string]: string | number;
 }
 
- interface ProductByIdResponse {
+interface ProductByIdResponse {
   status: string;
   message: string;
   product: Produto;
@@ -18,7 +18,7 @@ interface ApiResponse<T> {
   products: T[];
 }
 
-export async function getProdutos<T>(
+export async function getProdutos<T extends Produto>(
   path: string = "",
   params: QueryParams = {}
 ): Promise<Produto[]> {
@@ -37,7 +37,6 @@ export async function getProdutos<T>(
     const data: ApiResponse<T> = await response.json();
 
     return data.products;
-    
   } catch (error) {
     console.error("Erro ao buscar produtos:", error);
     throw error;
@@ -46,7 +45,7 @@ export async function getProdutos<T>(
 
 // Buscar produtos por página
 export async function getProductsByPage(page: number): Promise<Produto[]> {
-  const products = await getProdutos<Produto>('', { page });
+  const products = await getProdutos<Produto>("", { page });
   return products;
 }
 
@@ -73,6 +72,6 @@ export async function getProductsByCategoryTypeAndSort(
   type: string,
   sort: string
 ): Promise<Produto[]> {
-  const products = await getProdutos<Produto>('/category', { type, sort });
+  const products = await getProdutos<Produto>("/category", { type, sort });
   return products;
 }
