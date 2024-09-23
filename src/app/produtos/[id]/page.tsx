@@ -1,7 +1,7 @@
-// app/Produtos/[id]/page.tsx
-import { getProductById } from '@/lib/getProdutos';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
+import { getProductById } from "@/lib/getProdutos";
+import { notFound } from "next/navigation";
+import PageLayout from "@/app/components/PageLayout";
+import SingleProduct from "@/app/components/SingleProduct";
 
 interface ProductDetailPageProps {
   params: {
@@ -9,7 +9,10 @@ interface ProductDetailPageProps {
   };
 }
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+// eslint-disable-next-line @next/next/no-async-client-component
+export default async function ProductDetailPage({
+  params,
+}: ProductDetailPageProps) {
   const { id } = params;
 
   const product = await getProductById(Number(id));
@@ -19,17 +22,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   return (
-    <div>
-      <h1>{product.title}</h1>
-      <Image
-        src={product.image}
-        alt={product.title}
-        width={300}
-        height={300}
-      />
-      <p>{product.description}</p>
-      <p>Price: ${product.price}</p>
-      <p>Category: {product.category}</p>
-    </div>
+    <PageLayout>
+      <SingleProduct product={product} />
+    </PageLayout>
   );
 }

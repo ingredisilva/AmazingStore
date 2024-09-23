@@ -58,13 +58,14 @@ export default function SideStore() {
   const Filters = styled.div`
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
   `;
 
   return (
     <div className="container">
       <Filters>
         <h1>Our Products</h1>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "8px", flexWrap: 'wrap' }}>
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
