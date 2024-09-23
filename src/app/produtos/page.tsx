@@ -86,7 +86,7 @@ export default function SideStore() {
   return (
     <div /* className="container" */ style={{ height: '100%' }}>
       <Filters>
-        <h1>Our Products</h1>
+        <h2>Amazing Products, Amazing Store</h2>
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           <SearchBar
             value={searchQuery}
