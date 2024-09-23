@@ -19,15 +19,14 @@ const Card = styled.div`
   box-shadow: 0 4px 8px rgba(93, 93, 93, 0.1);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
+   justify-content: space-between;
+/*  align-items: center;*/
+  text-align: center; 
   transition: transform 0.2s ease-in-out;
   text-decoration: none;
   color: inherit;
   width: 100%;
-/*   height: 500px;
- */  
+  
   &:hover {
     transform: translateY(-5px);
   }
@@ -37,10 +36,15 @@ const Card = styled.div`
     height: 250px;
     position: relative;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
 
   img {
     border-radius: 10px;
+    object-fit: cover;
   }
 
   h2 {
@@ -55,7 +59,7 @@ const Card = styled.div`
     font-size: 20px;
     color: #2f3645;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-top: 10px;
     text-align: left;
   }
 
@@ -75,6 +79,7 @@ const Button = styled.button`
   cursor: pointer;
   margin-top: 10px;
   width: 100%;
+  max-width: 200px;
 
   &:hover {
     background-color: #333b4b;
@@ -94,26 +99,33 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
+
     <Card>
-      <Link href={`/produtos/${product.id}`} passHref>
-        <div>
-          <div className="image-container">
-            <Image src={product.image} alt={product.title} layout="fill" objectFit="cover" />
+      <>
+        <Link href={`/produtos/${product.id}`} passHref>
+          <div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="image-container">
+              <Image src={product.image} alt={product.title} layout="fill" objectFit="cover" />
+            </div>
+            <h2>{product.title}</h2>
+            <p className="desc">{shortDescription}</p>
           </div>
-          <h2>{product.title}</h2>
-          <p className="desc">{shortDescription}</p>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "end",
-              alignItems: "center",
-            }}
-          >
-            <p className="price">${product.price.toFixed(2)}</p>
+        </Link>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div >
+            <p className="price" >${product.price.toFixed(2)}</p>
           </div>
+          <Button onClick={handleAddToCart}>Add to Cart</Button>
+
         </div>
-      </Link>
-      <Button onClick={handleAddToCart}>Add to Cart</Button>
-    </Card>
+
+      </>
+    </Card >
   );
 }
