@@ -5,7 +5,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Image from "next/image";
-import { addItem, removeItem } from "@/features/cartSlice"; // Import your actions
+import { addItem, removeItem } from "@/features/cartSlice";
 
 const Container = styled.div`
   max-width: 1280px;
@@ -88,19 +88,26 @@ const CheckoutButton = styled.button`
   border: none;
   border-radius: 5px;
 `;
+export interface CartItem {
+  id: number;
+  title: string;
+  price: number;
+  quantity: number;
+  image: string;
+}
 
 const CartPage: React.FC = () => {
-  const { items, totalQuantity, totalPrice } = useSelector(
+  const { items, totalQuantity } = useSelector(
     (state: RootState) => state.cart
   );
   const dispatch = useAppDispatch();
 
-  const handleAddItem = (item) => {
-    dispatch(addItem({ ...item, quantity: 1 })); // Add one more item
+  const handleAddItem = (item: CartItem) => {
+    dispatch(addItem({ ...item, quantity: 1 }));
   };
 
-  const handleRemoveItem = (item) => {
-    dispatch(removeItem(item.id)); // Remove one item
+  const handleRemoveItem = (item: CartItem) => {
+    dispatch(removeItem(item.id));
   };
 
   return (
