@@ -1,4 +1,6 @@
 "use client";
+import { AnimatePresence, motion } from "framer-motion";
+import router from "next/router";
 import React from "react";
 import styled from "styled-components";
 
@@ -35,7 +37,19 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
     <PageContainer>
       {/*       <Header />
        */}{" "}
-      <MainContent>{children}</MainContent>
+      <MainContent>
+        <AnimatePresence exitBeforeEnter>
+          <motion.div
+            key={router.route}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 0.5 }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
+      </MainContent>
       <FooterContainer>
         <p>© 2024 AWESOMEStore. All rights reserved.</p>
       </FooterContainer>
